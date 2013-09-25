@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe.library.api.resources;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,11 +15,13 @@ import javax.ws.rs.core.Response;
 
 //import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 //import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+
 
 //import com.yammer.dropwizard.jersey.params.LongParam;
 import com.yammer.metrics.annotation.Timed;
@@ -48,7 +51,7 @@ public class BookResource {
     //---------CREATING A BOOK----------
     @POST
     @Timed(name = "create-book")
-    public Response createBook(Book book) {
+    public Response createBook(@Valid Book book) {
 		counter++;	
 		book.setIsbn(counter);
 		bookhashmap.put(counter, book);
@@ -89,13 +92,11 @@ public class BookResource {
     
 	  //---------UPDATING A BOOK----------    
     @PUT
-    @Path("/{isbn}?status={new-status}")
+    @Path("/{isbn}")
     @Timed(name = "update-book")
     public Response updateBook(@QueryParam("status") String status, @PathParam("isbn") int isbn) {
-		Book book = new Book();
-		book = bookhashmap.put(book.getIsbn(), book);
+		Book book=bookhashmap.get(isbn);
 		book.setStatus(status);
-		//bookhashmap.put(isbn, book);
 		LinksDto bookResponse = new LinksDto();
 		bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn(), "GET"));
 		bookResponse.addLink(new LinkDto("update-book","/books/" + book.getIsbn(), "PUT"));

@@ -3,6 +3,8 @@ package edu.sjsu.cmpe.library.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -10,6 +12,7 @@ public class Book {
 	@JsonProperty
 	
     private static int isbn;
+	@NotNull(message="Should not be nulls")
     private String title;
     @JsonProperty("publication-date") 
     private String publication;
